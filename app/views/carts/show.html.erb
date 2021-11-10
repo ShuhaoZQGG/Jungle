@@ -49,7 +49,9 @@
     </div>
   </div>
   <% else %>
-  <p>Your Cart is Empty</p>
-  <%= link_to 'Back to Shopping', root_path%>
+    <section class = "empty-warning alert alert-warning">
+      <p>Your Cart is Empty</p>
+    </section>
+    <%= link_to 'Back to Shopping', root_path%>
   <% end %>
 </section>
