@@ -3,9 +3,27 @@
   <header class="page-header">
     <h1>Order #<%= @order.id %></h1>
   </header>
+  <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th colspan="2">Product</th>
+          <th>Description</th>
+          <th>Quantity</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+      <%  @order.line_items.product.each do |line_item| %>
+        <%= render 'order', product: line_item[0].product, quantity: line_item[0][:quantity], total_price_cents: line_item[0][:total_price_cents]%>
+      <% end %>
+      </tbody>
+    </table>
 
+    <%= @products %>
   <div class="order-summary jumbotron">
     <h4>Thank you for your order!</h4>
+    <h4>Purchased by: <%= @order.email %></h4>
+    <p><b>Total Price: <%=humanized_money_with_symbol @order.total_cents/100 %> </b></p>
   </div>
 
   <%= link_to "Continue Shopping", root_path, class: 'btn btn-lg btn-primary' %>
