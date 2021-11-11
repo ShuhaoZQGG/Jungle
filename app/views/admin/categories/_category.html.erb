@@ -1,0 +1,16 @@
+<tr>
+  <td>
+    <%= category.name%>
+  </td>
+  <td>
+    <%= category.id%>
+  </td>
+  <td >
+    <% category.products.each do |product|%>
+    <div class = "col-md-2">
+      <span class =  "label label-info label-as-badge"><%= product.name%></span> 
+      <img  src = <%= product.image.tiny%> alt = <%= product.name%>>  
+    </div>   
+    <% end %>
+  </td>
+</tr>
