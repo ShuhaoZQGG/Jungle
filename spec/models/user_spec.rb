@@ -56,4 +56,68 @@ RSpec.describe User, type: :model do
       expect(@new_user2.errors.messages[:email]).to include('has already been taken')
     end
   end
+
+  describe 'authenticate with credentials' do
+    it "return nil with nil email and password" do
+      expect(User.authenticate_with_credentials(nil, nil)).to eq(false)
+    end
+
+    it "return nil with valid email and nil password" do
+      User.new(
+        name:                  "rspec",
+        email:                 "rspec@mail.com",
+        password:              "password",
+        password_confirmation: "password"
+      ).save
+      expect(User.authenticate_with_credentials("rspec@mail.com", nil)).to eq(false)
+    end
+
+    it 'return user with valid email and password' do 
+      User.new(
+        name:                  "rspec",
+        email:                 "rspec@mail.com",
+        password:              "password",
+        password_confirmation: "password"
+      ).save
+
+      validated_user = User.authenticate_with_credentials("rspec@mail.com", "password")
+      expect(validated_user.email).to eq("rspec@mail.com")
+    end
+
+    it "return a user with valid email and password case insensitive" do
+      User.new(
+        name:                  "rspec",
+        email:                 "rspec@mail.com",
+        password:              "password",
+        password_confirmation: "password"
+      ).save
+
+      user = User.authenticate_with_credentials("RspEC@Mail.com", "password")
+      expect(user.email).to eq("rspec@mail.com")
+    end
+
+    it "return a user with valid email and password case insensitive with leading spaces" do
+      User.new(
+        name:                  "rspec",
+        email:                 "rspec@mail.com",
+        password:              "password",
+        password_confirmation: "password"
+      ).save
+
+      user = User.authenticate_with_credentials("   RSpec@Mail.com", "password")
+      expect(user.email).to eq("rspec@mail.com")
+    end
+
+    it "return a user with valid email and password case insensitive with leading and trailing spaces" do
+      User.new(
+        name:                  "rspec",
+        email:                 "rspec@mail.com",
+        password:              "password",
+        password_confirmation: "password"
+      ).save
+
+      user = User.authenticate_with_credentials("   RSPEC@Mail.com"   , "password")
+      expect(user.email).to eq("rspec@mail.com")
+    end
+  end
 end
